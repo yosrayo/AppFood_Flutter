@@ -19,13 +19,14 @@ class CardDataBaseHelper {
 
   initDb() async {
     String path = join(await getDatabasesPath(), 'card.db');
-    return await openDatabase(path, version: 1,
+    return await openDatabase(path, version: 6,
         onCreate: (Database db, int version) async {
       await db.execute(''' 
     CREATE TABLE $tableCard(
-      $columnName TEXT NOT NULL,
+        name TEXT NOT NULL,
       $columnImage TEXT NOT NULL,
-      $columnQuatity INTEGER NOT NULL,
+      $columnQuatity INTEGER,
+      quantity INTEGER NOT NULL,
       $columnPrice INTEGER NOT NULL )
      ''');
     });

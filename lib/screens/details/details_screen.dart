@@ -18,7 +18,7 @@ class DetailsScreen extends StatelessWidget {
       backgroundColor: Color(0xFFF5F6F9),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(price: product.price),
+        child: CustomAppBar(rating: product.price),
       ),
       body: Body(model: this.product),
     );

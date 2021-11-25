@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/models/Cart.dart';
@@ -11,6 +10,8 @@ class CardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+     getAllProduct();
+
   }
 
   @override
@@ -25,11 +26,13 @@ class CardController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   ValueNotifier<bool> _loading = ValueNotifier(false);
 
-  List<CardModel> _cardProduct = [];
-  List<CardModel> get cardPoduct => _cardProduct;
-MoreController(){
-  getAllProduct();
-}
+  var cardProduct = [].obs;
+   get cardPoduct => cardProduct.value;
+  CardController() {
+    getAllProduct();
+   
+  }
+
   addProduct(CardModel cardModel) async {
     var dbHelper = CardDataBaseHelper.db;
     await dbHelper.insert(cardModel);
@@ -39,8 +42,10 @@ MoreController(){
   getAllProduct() async {
     _loading.value = true;
     var dbHelper = CardDataBaseHelper.db;
-    _cardProduct =await dbHelper.getAll();
-    print(_cardProduct.length);
+    cardProduct.value = await dbHelper.getAll();
+    print("fffffffffffffffhsjsjs${cardProduct.length}");
+
+  
 
     _loading.value = false;
   }

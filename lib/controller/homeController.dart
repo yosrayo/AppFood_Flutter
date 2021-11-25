@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
@@ -9,7 +10,7 @@ import 'package:shop_app/services/homeService.dart';
 class HomeController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   ValueNotifier<bool> _loading = ValueNotifier(false);
-
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List<CategoryModel> get categoryModel => _categoryModel;
   List<CategoryModel> _categoryModel = [];
 

@@ -5,8 +5,8 @@ import 'package:shop_app/size_config.dart';
 final String tableCard = 'card';
 final String columnName = 'name';
 final String columnImage = 'image';
-final int columnPrice = 'price' as int;
-final int columnQuatity = 'quality' as int;
+final String columnPrice = 'price'  ;
+final String columnQuatity = 'quality';
 const kPrimaryColor = Color(0xFFFFC61F);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(

@@ -11,19 +11,16 @@ import 'package:shop_app/screens/details/details_screen.dart';
 import '../../../size_config.dart';
 
 class Categories extends GetView<HomeController> {
-
   @override
-  
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       init: Get.put(HomeController()),
       builder: (controller) => Column(
         children: [
           Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(5),
-          child: _searchTextFormField()),
-          SizedBox(height: 15,),
+              padding: EdgeInsets.all(5),
+              margin: EdgeInsets.all(5),
+              child: _searchTextFormField()),
           Container(
             height: 100,
             child: ListView.separated(
@@ -43,7 +40,7 @@ class Categories extends GetView<HomeController> {
                         padding: const EdgeInsets.all(8.0),
                         child: Image.network(
                             controller.categoryModel[index].image),
-                      ),
+                      ),  
                     ),
                     SizedBox(
                       height: 20,
@@ -74,97 +71,87 @@ class Categories extends GetView<HomeController> {
     );
   }
 
-
-  
-Widget _listViewProducts() {
-  return GetBuilder<HomeController>(
-      init: Get.put(HomeController()),
-      builder: (controller) => GridView.builder(
-        
-        
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (context, index) => GestureDetector(
-              //width: MediaQuery.of(context).size.width * .4,
-              onTap: () {
-                print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee${controller.productModel[index].price}");
-               Get.to(()=>DetailsScreen(  product: controller.productModel[index]));
-              },
-              child:
-              
-                  Column(
-                    children: [
-                      Container(
-                        
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    
-                      color: Colors.grey.shade100,
+  Widget _listViewProducts() {
+    return GetBuilder<HomeController>(
+        init: Get.put(HomeController()),
+        builder: (controller) => GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemBuilder: (context, index) => GestureDetector(
+                //width: MediaQuery.of(context).size.width * .4,
+                onTap: () {
+                  print(
+                      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee${controller.productModel[index].price}");
+                  Get.to(() =>
+                      DetailsScreen(product: controller.productModel[index]));
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey.shade100,
+                      ),
+                      width: 150,
+                      child: Container(
+                          height: 100,
+                          child: Image.network(
+                            controller.productModel[index].image,
+                            fit: BoxFit.fill,
+                          )),
                     ),
-                    width: 150,
-                    child: Container(
-                        height: 100,
-                        child: Image.network(
-                          controller.productModel[index].image,
-                          fit: BoxFit.fill,
-                          
-                        )
-                        ),
-                        
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomText(
-                    text: controller.productModel[index].name,
-                    alignment: Alignment.bottomCenter,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: CustomText(
-                      text: controller.productModel[index].description,
-                      color: Colors.grey,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CustomText(
+                      text: controller.productModel[index].name,
                       alignment: Alignment.bottomCenter,
                     ),
-                  ),
-                  CustomText(
-                    text:
-                        controller.productModel[index].price.toString() + " \$",
-                    color: kPrimaryColor,
-                    alignment: Alignment.bottomCenter,
-                  ),   SizedBox(
-                    height: 10,
-                  ),
-                    ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: CustomText(
+                        text: controller.productModel[index].description,
+                        color: Colors.grey,
+                        alignment: Alignment.bottomCenter,
+                      ),
+                    ),
+                    CustomText(
+                      text: controller.productModel[index].price.toString() +
+                          " \$",
+                      color: kPrimaryColor,
+                      alignment: Alignment.bottomCenter,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              itemCount: controller.productModel.length,
+            ));
+  }
 
-                  ),
-                  
-                
-              
-            ),
-            itemCount: controller.productModel.length,
-          ));
-}
-
- Widget _searchTextFormField() {
+  Widget _searchTextFormField() {
     return Container(
+      width: SizeConfig.screenWidth * 1,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey.shade200,
+        color: kSecondaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: TextFormField(
+      child: TextField(
+        onChanged: (value) => print(value),
         decoration: InputDecoration(
-          border: InputBorder.none,
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.black,
-          ),
-        ),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20),
+                vertical: getProportionateScreenWidth(9)),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            hintText: "Search product",
+            prefixIcon: Icon(Icons.search)),
       ),
     );
   }
-
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/controller/homeController.dart';
 import 'package:shop_app/screens/cart/cart_screen.dart';
+import 'package:shop_app/screens/home/components/drawer.dart';
 
 import '../../../size_config.dart';
 import 'icon_btn_with_counter.dart';
@@ -14,13 +17,14 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomeController homeController = Get.find<HomeController>();
   return AppBar(
     backgroundColor: Colors.white,
     elevation: 0,
     leading: IconButton(
       icon: SvgPicture.asset("assets/icons/menu.svg"),
       onPressed: () {
-        
+          homeController.scaffoldKey.currentState!.openDrawer();
       },
     ),
     title: RichText(
