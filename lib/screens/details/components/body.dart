@@ -51,6 +51,7 @@ class Body extends StatelessWidget {
                           press: () {
                              controller.addProduct(
                               CardModel(
+                                productId: model!.productId,
                                 name: model!.name,
                                 price: model!.price,
                                 image: model!.image,

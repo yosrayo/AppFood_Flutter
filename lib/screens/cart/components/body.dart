@@ -58,12 +58,16 @@ class _BodyState extends State<Body> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: null,
+                      onPressed: (){
+                        controller.deceaseQuantity(index);
+                      },
                       icon : Icon(Icons.exposure_minus_1)
                     ),
                     Text( controller.cardPoduct[index].quantity.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,)),
                     IconButton(
-                      onPressed: null,
+                      onPressed: (){
+                       controller.inceaseQuantity(index);
+                      },
                       icon : Icon(Icons.plus_one_outlined)
                     ),
                   ],

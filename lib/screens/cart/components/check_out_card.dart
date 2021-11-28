@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:shop_app/components/default_button.dart';
+import 'package:shop_app/controller/CardController.dart';
+import 'package:shop_app/screens/checkOut/checkOutView.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -63,22 +66,37 @@ class CheckoutCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: "Total:\n",
+                GetBuilder<CardController>(
+                  init: Get.put(CardController()),
+                  builder: (controller) => controller.cardPoduct.length==0 ? 
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextSpan(
-                        text: "\$337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      SvgPicture.asset("assets/images/emptyCart.svg" ,
+                      width: 150,
+                      height: 150,
+
                       ),
                     ],
+                    
+                  )
+                   :Text.rich(
+                    TextSpan(
+                      text: "Total:\n",
+                      children: [
+                        TextSpan(
+                          text: "\ ${controller.totalPrice}",
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
                     text: "Check Out",
-                    press: () {},
+                    press: () { Get.to(CheckOutview());},
                   ),
                 ),
               ],

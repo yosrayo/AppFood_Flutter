@@ -4,19 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Product {
-  late String name, image, description, id;
+  late String name, image, description, productId;
   late double price;
   late bool isFavourite;
   late String categorie;
 
-  Product(this.id, this.name, this.image, this.description, this.price, this.categorie,
+  Product(this.productId, this.name, this.image, this.description, this.price, this.categorie,
       this.isFavourite);
 
   Product.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) {
       return;
     }
-    id = map['id'];
+    productId = map['productId'];
     name = map['name'];
     image = map['image'];
     description = map['description'];
@@ -27,7 +27,7 @@ class Product {
 
   toJson() {
     return {
-      'id': id,
+      'productId': productId,
       'name': name,
       'image': image,
       'description': description,

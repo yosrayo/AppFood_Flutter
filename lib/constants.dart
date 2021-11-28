@@ -7,6 +7,7 @@ final String columnName = 'name';
 final String columnImage = 'image';
 final String columnPrice = 'price'  ;
 final String columnQuatity = 'quality';
+final String columnProductId ='productId';
 const kPrimaryColor = Color(0xFFFFC61F);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
@@ -58,4 +59,14 @@ OutlineInputBorder outlineInputBorder() {
 
 
 
+}
+
+const kTileHeight = 50.0;
+const inProgressColor = Colors.black87;
+const todoColor = Color(0xffd1d2d7);
+
+enum Pages {
+  DeliveryTime,
+  AddAddress,
+  Summary,
 }

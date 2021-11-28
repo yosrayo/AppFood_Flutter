@@ -5,20 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shop_app/helper/localStorage_data.dart';
 import 'package:shop_app/models/User.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
-
-
 
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/services/firestoreUser.dart';
 
 class Auth extends GetxController {
-  //TODO: Implement LoginController
+  final LocalStorageData localStorageData = Get.find();
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late String email, password, firstname , lastname,address ;
+  late String email, password, firstname, lastname, address;
   late int phone;
 
   final count = 0.obs;
@@ -55,7 +54,7 @@ class Auth extends GetxController {
   void googleSignInMethod() async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     print(googleUser);
-    
+
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleUser!.authentication;
 
@@ -69,7 +68,11 @@ class Auth extends GetxController {
 
   void signInWithEmailAndPassword() async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
+        await FireStoreUser().getCurrentUser(value.user!.uid).then((value) {
+          setUser(UserModel.fromJson(value.data() as Map<dynamic,dynamic> ));
+        });
+      });
       Get.to(HomeScreen());
     } catch (e) {
       print(e);
@@ -96,27 +99,31 @@ class Auth extends GetxController {
   }
 
   void saveUser(UserCredential user) async {
-    await FireStoreUser().addUserToFireStore(UserModel(
+
+   UserModel userModel=  UserModel(
       user.user!.uid,
       user.user!.email!,
       firstname == null ? user.user!.displayName! : firstname,
-       lastname == null ? user.user!.displayName! : lastname,
-       
-       '',
-       
-    ));
-  }
-    Future signOut() async {
- 
-      return await _auth.signOut();
-       Get.offAll(SignInScreen());
-  
-    
-  }
-  
-  Future<void> sendPasswordResetEmail(String email) async {
- 
-    return _auth.sendPasswordResetEmail(email: email);
+      lastname == null ? user.user!.displayName! : lastname,
+      '',
+    );
+    await FireStoreUser().addUserToFireStore(userModel);
+    setUser(userModel);
   }
 
+  void setUser(UserModel userModel) async {
+    await localStorageData.setUser(userModel);
+    print(userModel);
+  }
+
+  Future<void> signOut() async {
+    GoogleSignIn().signOut();
+    FirebaseAuth.instance.signOut();
+    localStorageData.deleteUser();
+    Get.offAll(SignInScreen());
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
+  }
 }

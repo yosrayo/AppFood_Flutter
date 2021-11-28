@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/controller/CardController.dart';
 import 'package:shop_app/controller/homeController.dart';
 import 'package:shop_app/models/Cart.dart';
 
@@ -23,7 +24,7 @@ class CartScreen extends StatelessWidget {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
+    CardController controller = Get.put(CardController());
     return AppBar(
       title: Column(
         children: [
@@ -32,7 +33,7 @@ class CartScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            "${controller.productModel.length} items",
+            "${controller.cardProduct.length} items",
             style: Theme.of(context).textTheme.caption,
           ),
         ],

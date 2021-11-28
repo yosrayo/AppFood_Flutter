@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/Cart.dart';
+import 'package:shop_app/models/Product.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 class CardDataBaseHelper {
@@ -19,11 +20,12 @@ class CardDataBaseHelper {
 
   initDb() async {
     String path = join(await getDatabasesPath(), 'card.db');
-    return await openDatabase(path, version: 6,
+    return await openDatabase(path, version: 15 ,
         onCreate: (Database db, int version) async {
       await db.execute(''' 
     CREATE TABLE $tableCard(
         name TEXT NOT NULL,
+        productId TEXT NOT NULL,
       $columnImage TEXT NOT NULL,
       $columnQuatity INTEGER,
       quantity INTEGER NOT NULL,
@@ -48,5 +50,22 @@ await dbClient!.insert(
     List <CardModel> list = maps.isNotEmpty ? maps.map((e) => CardModel.fromJson(e)).toList() : [];
 
     return list;
+  }
+
+
+  updateProduct(CardModel model) async{
+    var dbClient = await database;
+    return await dbClient!.update(tableCard , model.toJson(), 
+    where : 'productId = ?' , whereArgs: [model.productId]);
+
+  }
+    deleteProduct(Product model) async{
+    var dbClient = await database;
+    return await dbClient!.delete(tableCard , 
+    where: 'productId = ?', whereArgs: [model.productId],
+    );
+
+   
+
   }
 }
