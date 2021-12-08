@@ -15,70 +15,76 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+
   @override
+
   Widget build(BuildContext context) {
-     CardController controller = Get.put(CardController());
-     
+    CardController controller = Get.find<CardController>();
+
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-      child: Obx(()=>  ListView.builder(
-        itemCount: controller.cardPoduct.length,
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Dismissible(
-            key: Key(controller.cardProduct[index].name),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              setState(() {
-               controller.cardProduct[index].removeAt(index);
-              });
-            },
-            background: Container(
-              height: 70,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              margin: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFE6E6),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                children: [
-                  Spacer(),
-                 Icon(Icons.delete,size: 40,)
-                ],
+        padding:
+        EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child:  GetBuilder<CardController>(
+          init: CardController(),
+          builder:(controller)=> ListView.builder(
+
+            itemCount: controller.cardPoduct.length,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Dismissible(
+                  key: Key(controller.cardProduct[index].name),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    setState(() {
+                      controller.deletelement(index);
+                    });
+                  },
+                  background: Container(
+                    height: 70,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFE6E6),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Icon(Icons.delete,size: 40,)
+                      ],
+                    ),
+                  ),
+                  child: ListTile(
+                    title:  Text( controller.cardPoduct[index].name,style: TextStyle(fontSize: 18),),
+                    subtitle:  Text( controller.cardPoduct[index].price.toString(),style: TextStyle(fontSize: 15),),
+                    leading:Image.network(controller.cardPoduct[index].image,height: 50,) ,
+                    trailing: Container(
+                      width: 110,
+                      child: Row(
+                        children: [
+                          IconButton(
+                              onPressed: (){
+                                controller.DecreaseQuantity(index);
+                              },
+                              icon : Icon(Icons.exposure_minus_1)
+                          ),
+                          Text( controller.cardPoduct[index].quantity.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,)),
+                          IconButton(
+                              onPressed: (){
+                                controller.InscreaseQuantity(index);
+                              },
+                              icon : Icon(Icons.plus_one_outlined)
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+
+
               ),
             ),
-            child: ListTile(
-              title:  Text( controller.cardPoduct[index].name,style: TextStyle(fontSize: 18),),
-              subtitle:  Text( controller.cardPoduct[index].price.toString(),style: TextStyle(fontSize: 15),),
-              leading:Image.network(controller.cardPoduct[index].image,height: 50,) ,
-              trailing: Container(
-                width: 110,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: (){
-                        controller.deceaseQuantity(index);
-                      },
-                      icon : Icon(Icons.exposure_minus_1)
-                    ),
-                    Text( controller.cardPoduct[index].quantity.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,)),
-                    IconButton(
-                      onPressed: (){
-                       controller.inceaseQuantity(index);
-                      },
-                      icon : Icon(Icons.plus_one_outlined)
-                    ),
-                  ],
-                ),
-              ),
-            )
-            
-            
           ),
         ),
-      ),
-    ));
+    );
   }
 }

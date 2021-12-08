@@ -41,6 +41,7 @@ dependencies:
   get:
   flutter_launcher_icons: ^0.9.2
   status_change: ^2.0.0
+  location: ^4.2.0
 
 dev_dependencies:
   flutter_test:

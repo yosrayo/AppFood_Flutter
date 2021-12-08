@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/constants.dart';
+import 'package:shop_app/controller/Auth.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 
 
@@ -81,33 +83,38 @@ class AppDrawer extends StatelessWidget {
 
   Widget _createHeader() {
 
-    return DrawerHeader(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: Colors.orange
-            ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-          SizedBox(height: 11,),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(radius: 40.0,
-              backgroundImage: AssetImage("images/app-resto-icon.PNG",),
-            ),
-          ),
+    return  GetBuilder<Auth>(
+        init: Get.put(Auth()),
+        builder: (controller ) => Container(
+        child: DrawerHeader(
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: kPrimaryColor,
+                ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
               SizedBox(height: 11,),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text("hhhhhhh",
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(radius: 40.0,
+                  backgroundImage: AssetImage("assets/images/profile.png",),
+                ),
               ),
-            ),
-          ),
-        ]));
+                  SizedBox(height: 11,),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text("hhhhhhh",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ])),
+      ),
+    );
   }

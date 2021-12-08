@@ -7,8 +7,8 @@ import 'package:shop_app/screens/home/home_screen.dart';
 class CheckOutController extends GetxController {
  int get index => _index ;
   int _index = 0;
-  Pages get pages =>_pages;
-  Pages _pages = Pages.DeliveryTime;
+  Pages? get pages =>_pages;
+  Pages? _pages = Pages.DeliveryTime;
 
   void changeIndex(int i){
     _index = i ;
@@ -28,7 +28,7 @@ class CheckOutController extends GetxController {
       return inProgressColor;
     } else if (i < _index) {
       return kPrimaryColor;
-    } else {
+    } else { 
       return todoColor;
     }
   }

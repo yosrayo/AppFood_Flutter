@@ -6,9 +6,16 @@ import 'package:shop_app/models/User.dart';
 
 class LocalStorageData extends GetxController {
 
+
+  @override
+  onInit(){
+    super.onInit();
+    getUserData();
+  }
+
 Future <UserModel?>get getUser async{
   try{
-  UserModel userModel = await _getUserData();
+  UserModel userModel = await getUserData();
   if(userModel== null){
     return null;
   }
@@ -20,9 +27,10 @@ return userModel;
   }
 }
 
-_getUserData()async{
+getUserData()async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var value= prefs.getString('user');
+  print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk$value");
   return UserModel.fromJson(json.decode(value!));
 }
 

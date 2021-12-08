@@ -5,6 +5,9 @@ class HomeService {
       FirebaseFirestore.instance.collection('categorie');
   final CollectionReference _productCollectionRef =
       FirebaseFirestore.instance.collection('products');
+       final CollectionReference _popularCollectionRef =
+      FirebaseFirestore.instance.collection('popular');
+
 
   Future<List<QueryDocumentSnapshot>> getCategory() async {
     var value = await _categoryCollectionRef.get();
@@ -14,9 +17,15 @@ class HomeService {
     return value.docs;
   }
 
-  Future<List<QueryDocumentSnapshot>> getBestSelling() async {
+  Future<List<QueryDocumentSnapshot>> getProduct() async {
     var value = await _productCollectionRef.get();
     print("fffffffffffffffffffff${value.docs}");
+    return value.docs;
+  }
+
+   Future<List<QueryDocumentSnapshot>> getBestSelling() async {
+    var value = await _popularCollectionRef.get();
+    print("hhhhhhhhhhhhhhhhhhhhh${value.docs}");
     return value.docs;
   }
 }

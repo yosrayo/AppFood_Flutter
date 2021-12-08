@@ -16,6 +16,23 @@ class HomeController extends GetxController {
 
   List<Product> get productModel => _productModel;
   List<Product> _productModel = [];
+   String get categoryName => _categoryName;
+  late  String _categoryName;
+
+
+ HomeViewModel() {
+    getCategory();
+    getProducts();
+
+  }
+  set categoryName(String value) {
+    _categoryName = value;
+  }
+
+   ClearProducts(){
+    _productModel.clear();
+
+  }
 
     @override
     onInit(){
@@ -26,11 +43,7 @@ class HomeController extends GetxController {
     }
 
 
-  HomeViewModel() {
-    getCategory();
-    getProducts();
-
-  }
+ 
 
   getCategory() async {
     _loading.value = true;
@@ -45,18 +58,24 @@ class HomeController extends GetxController {
     });
   }
 
+
+
+
    getProducts() async {
     _loading.value = true;
-    HomeService().getBestSelling().then((value) {
+    HomeService().getProduct().then((value) {
       for (int i = 0; i < value.length; i++) {
-        _productModel.add(Product.fromJson(value[i].data()as Map<dynamic,dynamic>));
+          String x = value[i]['categorie'];
+      if(x.toLowerCase()== categoryName.toLowerCase()){
+   _productModel.add(Product.fromJson(value[i].data()as Map<dynamic,dynamic>));
         _loading.value = false;
+     }
+        
       }
-      print(_productModel.length);
+      print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhkkkkkkkkkkkhhhhhh${_productModel.length}");
       update();
     });
   }
-
  
 
 }

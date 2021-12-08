@@ -20,7 +20,7 @@ class CardDataBaseHelper {
 
   initDb() async {
     String path = join(await getDatabasesPath(), 'card.db');
-    return await openDatabase(path, version: 15 ,
+    return await openDatabase(path, version: 17 ,
         onCreate: (Database db, int version) async {
       await db.execute(''' 
     CREATE TABLE $tableCard(
@@ -59,13 +59,14 @@ await dbClient!.insert(
     where : 'productId = ?' , whereArgs: [model.productId]);
 
   }
-    deleteProduct(Product model) async{
+  
+
+
+  deleteProduct(CardModel product)async{
     var dbClient = await database;
-    return await dbClient!.delete(tableCard , 
-    where: 'productId = ?', whereArgs: [model.productId],
+    return await dbClient!.delete(
+        tableCard,
+        where :'${columnProductId} == ?', whereArgs: [product.productId]
     );
-
-   
-
   }
 }

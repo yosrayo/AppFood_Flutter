@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_app/helper/localStorage_data.dart';
+import 'package:shop_app/models/User.dart';
 import 'package:shop_app/models/User.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 
@@ -19,8 +21,12 @@ class Auth extends GetxController {
 
   late String email, password, firstname, lastname, address;
   late int phone;
-
   final count = 0.obs;
+  get List => list;
+   var list = [].obs;
+  
+    String get fLname => _fLname;
+  String _fLname = "";
 
   @override
   void onInit() {
@@ -52,18 +58,25 @@ class Auth extends GetxController {
   }
 
   void googleSignInMethod() async {
+   // SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     print(googleUser);
 
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleUser!.authentication;
-
     final AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleSignInAuthentication.idToken,
       accessToken: googleSignInAuthentication.accessToken,
     );
     await _auth.signInWithCredential(credential);
-    Get.to(HomeScreen());
+    
+         localStorageData.setUser(UserModel(googleUser.id ,googleUser.email,googleUser.displayName.toString().split(" ")[0],googleUser.displayName.toString().split(" ")[1],googleUser.photoUrl.toString()));
+           print("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr${localStorageData.getUserData()}");
+       // list=  localStorageData.getUserData();
+        //print("tttttttttttttttttttttttt${list}");
+        
+     Get.to(HomeScreen());
   }
 
   void signInWithEmailAndPassword() async {
@@ -84,7 +97,13 @@ class Auth extends GetxController {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((user) async {
-        saveUser(user);
+        await FireStoreUser().addUserToFireStore(UserModel(
+        user.user!.uid,
+      user.user!.email!,
+      firstname == null ? user.user!.displayName! : firstname,
+      lastname == null ? user.user!.displayName! : lastname,
+      '',
+        ));
       });
 
       Get.offAll(SignInScreen());

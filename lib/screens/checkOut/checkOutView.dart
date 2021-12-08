@@ -1,131 +1,104 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shop_app/constants.dart';
-import 'package:shop_app/controller/checkOutController.dart';
-import 'package:shop_app/screens/checkOut/widgets/add_address.dart';
-import 'package:shop_app/screens/checkOut/widgets/delevery_time.dart';
+import 'package:location/location.dart';
 import 'package:shop_app/screens/checkOut/widgets/summary.dart';
-import 'package:status_change/status_change.dart';
-class CheckOutview extends StatelessWidget {
- static String routeName = "/checkout";
 
+class GetLocation extends StatefulWidget {
+    static String routeName = "/checkout";
+  const GetLocation({Key? key}) : super(key: key);
+
+  @override
+  _GetLocationState createState() => _GetLocationState();
+}
+
+class _GetLocationState extends State<GetLocation> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CheckOutController>(
-      init: Get.put(CheckOutController()),
-      builder: (controller)=> Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          title: Text(
-            "CheckOut",
-            style: TextStyle(
-              color: Colors.black,
+    return Scaffold(
+      body: SafeArea(
+        child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Text("Billing adress is the same as delivary adress "),
+
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "La Marsa, Av 14 Janvier",
+                      labelText: "Adresse",
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0,),
+                  Text("send your Current location "),
+                  SizedBox(height: 20.0,),
+
+
+                  ElevatedButton(
+                    child: Icon(Icons.location_on_outlined),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.blueAccent,
+                          fixedSize: const Size(300, 50),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50))),
+                      onPressed: () async{
+                        Location location = new Location();
+
+                        bool _serviceEnabled;
+                        PermissionStatus _permissionGranted;
+                        LocationData _locationData;
+
+                        _serviceEnabled = await location.serviceEnabled();
+                        if (!_serviceEnabled) {
+                          _serviceEnabled = await location.requestService();
+                          if (!_serviceEnabled) {
+                            return;
+                          }
+                        }
+
+                        _permissionGranted = await location.hasPermission();
+                        if (_permissionGranted == PermissionStatus.denied) {
+                          _permissionGranted = await location.requestPermission();
+                          if (_permissionGranted != PermissionStatus.granted) {
+                            return;
+                          }
+                        }
+
+                        _locationData = await location.getLocation();
+                        print(_locationData.longitude);
+                        print(_locationData.latitude);
+
+                      }),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Validate returns true if the form is valid, or false otherwise.
+                      if (_formKey.currentState!.validate()) {
+
+                          Get.to(Summary());
+
+
+                      }
+                    },
+                    child:  Text('Text'),
+                  ),
+
+                ],
+              ),
             ),
           ),
         ),
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Container(
-              height: 100,
-              child: StatusChange.tileBuilder(
-                theme: StatusChangeThemeData(
-                  direction: Axis.horizontal,
-                  connectorTheme: ConnectorThemeData(space: 1.0, thickness: 1.0),
-                ),
-                builder: StatusChangeTileBuilder.connected(
-                  itemWidth: (_) =>
-                  MediaQuery.of(context).size.width / _processes.length,
-                  nameWidgetBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Text(
-                        _processes[index],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: controller.getColor(index),
-                        ),
-                      ),
-                    );
-                  },
-                  indicatorWidgetBuilder: (_, index) {
-                    if (index <= controller.index) {
-                      return DotIndicator(
-                        size: 35.0,
-                        border: Border.all(color: Colors.green, width: 1),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return OutlinedDotIndicator(
-                        size: 30,
-                        borderWidth: 1.0,
-                        color: todoColor,
-                      );
-                    }
-                  },
-                  lineWidgetBuilder: (index) {
-                    if (index > 0) {
-                      if (index == controller.index) {
-                        final prevColor = controller.getColor(index - 1);
-                        final color = controller.getColor(index);
-                        var gradientColors;
-                        gradientColors = [
-                          prevColor,
-                          Color.lerp(prevColor, color, 0.5)
-                        ];
-                        return DecoratedLineConnector(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: gradientColors,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return SolidLineConnector(
-                          color: controller.getColor(index),
-                        );
-                      }
-                    } else {
-                      return null;
-                    }
-                  },
-                  itemCount: _processes.length,
-                ),
-              ),
-            ),
-            controller.pages == Pages.DeliveryTime
-                ? DeliveryTime()
-                : controller.pages == Pages.AddAddress
-                ? AddAddress()
-                : Summary()
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.skip_next),
-          onPressed: () {
-             controller.changeIndex(controller.index +1);
-
-          },
-          backgroundColor: inProgressColor,
-        ),
-      ),
     );
+
   }
 }
-
-final _processes = [
-  'Delivery',
-  'Address',
-  'Summer',
-];

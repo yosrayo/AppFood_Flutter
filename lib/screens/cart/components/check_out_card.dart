@@ -68,8 +68,8 @@ class CheckoutCard extends StatelessWidget {
               children: [
                 GetBuilder<CardController>(
                   init: Get.put(CardController()),
-                  builder: (controller) => controller.cardPoduct.length==0 ? 
-                  Column(
+                  builder: (controller) => /*controller.cardPoduct.length==0 ? */
+                 /* Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset("assets/images/emptyCart.svg" ,
@@ -79,8 +79,8 @@ class CheckoutCard extends StatelessWidget {
                       ),
                     ],
                     
-                  )
-                   :Text.rich(
+                  )*/
+                   Text.rich(
                     TextSpan(
                       text: "Total:\n",
                       children: [
@@ -96,7 +96,7 @@ class CheckoutCard extends StatelessWidget {
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
                     text: "Check Out",
-                    press: () { Get.to(CheckOutview());},
+                    press: () { Get.to(GetLocation());},
                   ),
                 ),
               ],

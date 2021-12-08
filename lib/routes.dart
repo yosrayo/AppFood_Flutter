@@ -29,6 +29,6 @@ final Map<String, WidgetBuilder> routes = {
   DetailsScreen.routeName: (context) => DetailsScreen(  product: Product("1", "name", "image", "description", 12.6, "categorie", false) ),
   CartScreen.routeName: (context) => CartScreen(),
   ProfileScreen.routeName: (context) => ProfileScreen(),
-  CheckOutview.routeName: (context) => CheckOutview(),
+  GetLocation.routeName: (context) => GetLocation(),
   AppDrawer.routeName: (context) => AppDrawer(),
 };

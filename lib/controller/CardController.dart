@@ -31,26 +31,15 @@ class CardController extends GetxController {
   get cardPoduct => cardProduct;
   CardController() {
     getAllProduct();
+    getTotalPrice();
   }
 
- /* addProduct(CardModel cardModel) async {
-    for (int i = 0; i <= cardProduct.length; i++) {
-      if (cardProduct[i].productId == cardModel.productId) {
-        return;
-      }
-    }
-    var dbHelper = CardDataBaseHelper.db;
-    await dbHelper.insert(cardModel);
-    cardPoduct.add(cardModel);
 
-    _totalPrice += (cardModel.price * cardModel.quantity);
-    update();
-  }
-*/
-  addProduct(CardModel model) async{
+   addProduct(CardModel model) async{
     if(cardProduct.length==0){
       var dbHelper = CardDataBaseHelper.db;
       await dbHelper.insert(model);
+      getAllProduct();
     }else{
       for (int i=0; i<cardProduct.length;i++){
         if(cardProduct[i].productId==model.productId){
@@ -59,11 +48,24 @@ class CardController extends GetxController {
       }
       var dbHelper = CardDataBaseHelper.db;
       await dbHelper.insert(model);
+      getAllProduct();
     }
 
     update();
 
   }
+
+ getTotalPrice() {
+    _totalPrice =0;
+    for (int i = 0; i < cardProduct.length; i++) {
+      _totalPrice += (cardProduct[i].price *
+          cardProduct[i].quantity);
+      print(_totalPrice);
+    }
+    update();
+
+  }
+
 
   getAllProduct() async {
     _loading.value = true;
@@ -76,29 +78,38 @@ class CardController extends GetxController {
     update();
   }
 
-  getTotalPrice() {
-    for (int i = 0; i < cardProduct.length; i++) {
-      _totalPrice += (cardProduct[i].price * cardProduct[i].quantity);
-      print(_totalPrice);
-      update();
+
+   InscreaseQuantity(int index) async {
+     var dbHelper = CardDataBaseHelper.db;
+    cardProduct[index].quantity ++;
+    _totalPrice += ((double.parse(cardProduct[index].price)));
+    await dbHelper.updateProduct(cardProduct[index]);
+
+    update();
+  }
+
+
+  DecreaseQuantity(int index)async {
+      var dbHelper = CardDataBaseHelper.db;
+       if(cardProduct[index].quantity<=1){
+         print(cardProduct[index].quantity);
+           return;
+        }else{
+         cardProduct[index].quantity --;
     }
+
+    _totalPrice -= ((double.parse(cardProduct[index].price)));
+   
+    await dbHelper.updateProduct(cardProduct[index]);
+          update();
   }
 
-  inceaseQuantity(int index) async {
-    var dbHelper = CardDataBaseHelper.db;
-    cardProduct[index].quantity++;
-    _totalPrice += cardProduct[index].price;
-    await dbHelper.updateProduct(cardProduct[index]);
 
+    deletelement(int index)async{
+        var dbHelper = CardDataBaseHelper.db;
+     await dbHelper.deleteProduct(cardProduct[index]);
     update();
-  }
-  
-  deceaseQuantity(int index) async {
-    var dbHelper = CardDataBaseHelper.db;
-    cardProduct[index].quantity--;
-    _totalPrice -= cardProduct[index].price;
-    await dbHelper.updateProduct(cardProduct[index]);
-    update();
+
   }
 
 }
