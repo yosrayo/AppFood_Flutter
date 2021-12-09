@@ -12,6 +12,7 @@ class CardController extends GetxController {
     super.onInit();
     // ignore: unnecessary_statements
     getAllProduct();
+    
   }
 
   @override
@@ -26,6 +27,9 @@ class CardController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   ValueNotifier<bool> _loading = ValueNotifier(false);
   double get totalPrice => _totalPrice;
+  set totalPrice (double p){
+    _totalPrice =p ;
+  }
   double _totalPrice = 0.0;
   var cardProduct = [].obs;
   get cardPoduct => cardProduct;
@@ -93,12 +97,15 @@ class CardController extends GetxController {
       var dbHelper = CardDataBaseHelper.db;
        if(cardProduct[index].quantity<=1){
          print(cardProduct[index].quantity);
+         Get.snackbar("title", "message");
            return;
         }else{
          cardProduct[index].quantity --;
-    }
 
-    _totalPrice -= ((double.parse(cardProduct[index].price)));
+        }
+      _totalPrice -= (cardProduct[index].price);
+
+
    
     await dbHelper.updateProduct(cardProduct[index]);
           update();

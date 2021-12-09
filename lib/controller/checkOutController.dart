@@ -1,36 +1,47 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/home/home_screen.dart';
+import 'package:shop_app/models/order.dart';
 
-class CheckOutController extends GetxController {
- int get index => _index ;
-  int _index = 0;
-  Pages? get pages =>_pages;
-  Pages? _pages = Pages.DeliveryTime;
+class CheckoutController extends GetxController{
 
-  void changeIndex(int i){
-    _index = i ;
-    if(_index==1){
-      _pages = Pages.AddAddress;
-    }else if(_index ==2){
-      _pages = Pages.Summary;
-    }else if(_index==3){
-      Get.to(HomeScreen());
+  String _adresse= 'oss';
+  String get adresse => _adresse;
 
-    }
-    update();
+  set adresse(String value) {
+    _adresse = value;
+  }
+  String _longitude ='';
+
+  String get longitude => _longitude;
+  String _latitude ='';
+
+  String get latitude => _latitude;
+
+  set latitude(String latitude) {
+    _latitude = latitude;
   }
 
-  Color getColor(int i) {
-    if (i == _index) {
-      return inProgressColor;
-    } else if (i < _index) {
-      return kPrimaryColor;
-    } else { 
-      return todoColor;
-    }
+  set longitude(String longitude) {
+    _longitude = longitude;
+  }
+  
+  final CollectionReference _orderCollectionRef =
+  FirebaseFirestore.instance.collection('order');
+
+  addOrder(Order order)async{
+
+    await _orderCollectionRef.add({
+      'adresse': order.adresse,
+      'latitude': order.latitude,
+      'longitude':order.longitude,
+      'totalprice':order.totalPrice,
+
+      'products': FieldValue.arrayUnion(order.products),
+
+
+    });
+    print('ok added successfully');
   }
 
 

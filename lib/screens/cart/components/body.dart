@@ -25,19 +25,21 @@ class _BodyState extends State<Body> {
         padding:
         EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child:  GetBuilder<CardController>(
-          init: CardController(),
+          init: Get.put(CardController()),
           builder:(controller)=> ListView.builder(
 
             itemCount: controller.cardPoduct.length,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Dismissible(
-                  key: Key(controller.cardProduct[index].name),
+                  key: UniqueKey(),
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    setState(() {
-                      controller.deletelement(index);
-                    });
+                    controller.totalPrice -= ((controller.cardPoduct[index].price) *(controller.cardPoduct[index].quantity));
+                    controller.cardProduct.remove(controller.cardPoduct[index]);
+                    controller.deletelement(index);
+                    controller.update();
+                   
                   },
                   background: Container(
                     height: 70,
@@ -65,6 +67,9 @@ class _BodyState extends State<Body> {
                           IconButton(
                               onPressed: (){
                                 controller.DecreaseQuantity(index);
+
+                                controller.update();
+
                               },
                               icon : Icon(Icons.exposure_minus_1)
                           ),
@@ -72,6 +77,8 @@ class _BodyState extends State<Body> {
                           IconButton(
                               onPressed: (){
                                 controller.InscreaseQuantity(index);
+                                controller.totalPrice+=controller.cardPoduct[index].price;
+                                controller.update();
                               },
                               icon : Icon(Icons.plus_one_outlined)
                           ),

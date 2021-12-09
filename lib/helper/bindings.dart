@@ -15,7 +15,7 @@ class Binding extends Bindings {
     Get.lazyPut(() => HomeController());
     Get.lazyPut(() => CardController());
     Get.lazyPut(() => LocalStorageData());
-    Get.lazyPut(() => CheckOutController());
+    Get.lazyPut(() => CheckoutController());
     
   }
 }

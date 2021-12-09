@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
@@ -85,7 +86,7 @@ class _GetLocationState extends State<GetLocation> {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState!.validate()) {
 
-                          Get.to(Summary());
+                          Get.to(SummaryScreen());
 
 
                       }

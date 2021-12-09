@@ -46,6 +46,8 @@ class HomeController extends GetxController {
  
 
   getCategory() async {
+    //_categoryModel = [];
+    _categoryModel.clear();
     _loading.value = true;
     HomeService().getCategory().then((value) {
       print("value");

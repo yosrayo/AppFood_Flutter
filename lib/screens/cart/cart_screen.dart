@@ -25,6 +25,8 @@ class CartScreen extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     CardController controller = Get.put(CardController());
+    
+
     return AppBar(
       title: Column(
         children: [

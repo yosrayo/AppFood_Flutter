@@ -43,6 +43,8 @@ class Body extends StatelessWidget {
                                 quantity: 1
                                 )
                             );
+                          
+                            Get.snackbar("Success", "This product has been added successfully");
                             
                       
           },
